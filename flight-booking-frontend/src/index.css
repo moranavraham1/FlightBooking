@@ -1,13 +1,103 @@
-body {
+/* Reset default styles */
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f8fa;
+  color: #333;
+}
+
+/* Global container styling */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom:40px; /* הגדלתי את המרווח תחת הכותרת */
+  color: #0056b3;
+}
+
+
+
+/* Flight item styling */
+.flight-item, .booked-flight-item {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.flight-item:hover, .booked-flight-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.flight-item h3, .booked-flight-item h3 {
+  color: #0056b3;
+}
+
+/* Button styling */
+button, .button {
+  background-color: #61dafb; /* תכלת */
+  color: #fff;
+  border: none;
+  padding: 10px 0; /* פחות גובה כללי */
+  width: 150px; /* רוחב אחיד */
+  height: 45px; /* גובה אחיד */
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  text-decoration: none; /* עבור קישורים עם class "button" */
+  display: inline-flex;
+  justify-content: center; /* מרכז את הטקסט אופקית */
+  align-items: center; /* מרכז את הטקסט אנכית */
+}
+
+button:hover, .button:hover {
+  background-color: #4fa3f7; /* תכלת כהה יותר */
+  transform: scale(1.05);
+}
+
+/* Navbar styling */
+nav ul {
+  display: flex;
+  flex-direction: column;  /* Stack nav items vertically */
+  align-items: center;
+  list-style-type: none;
+  margin: 20px 0;
+}
+
+nav ul li {
+  margin: 10px 0;  /* Add space between navbar items */
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  color: #0056b3;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row; /* Stack buttons horizontally */
+  align-items: center; /* Center align buttons */
+  justify-content: center; /* Center buttons horizontally */
+  gap: 15px; /* Space between buttons */
+  margin-top: 40px; /* Increased margin to move buttons down */
 }

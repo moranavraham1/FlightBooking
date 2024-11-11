@@ -1,0 +1,61 @@
+.myBookingsContainer {
+    max-width: 750px; /* Increase the container width to 750px */
+    margin: 0 auto; /* Center the container */
+    padding: 16px; /* Add some padding inside the container */
+  }
+  
+  .bookingsList {
+    display: flex;
+    flex-direction: column; /* Stack the flight items vertically */
+    gap: 12px; /* Increase spacing between items */
+  }
+  
+  .booked-flight-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px; /* Increased padding for better spacing */
+    border: 1px solid #ccc;
+    font-size: 16px; /* Slightly increased font size */
+    background-color: #f9f9f9; /* Light background for each item */
+    border-radius: 8px; /* Slightly rounded corners */
+  }
+  
+  .booked-flight-item h3 {
+    font-size: 18px; /* Slightly larger font size for flight name */
+    margin: 4px 0;
+  }
+  
+  .booked-flight-item p {
+    font-size: 16px; /* Slightly larger font size for details */
+    margin: 4px 0;
+  }
+  
+  .deleteButton {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 14px; /* Increased padding for the button */
+    cursor: pointer;
+    border-radius: 6px; /* Rounded corners for button */
+    transition: background-color 0.3s ease; /* Smooth transition */
+  }
+  
+  .deleteButton:hover {
+    background-color: #ff1a1a;
+  }
+  
+  /* Success Message Styling */
+  .cancelMessage {
+    background-color: #d4edda; /* Light green background for success */
+    color: #155724; /* Dark green text for success message */
+    border: 1px solid #c3e6cb; /* Green border */
+    padding: 12px; /* Padding inside the message box */
+    border-radius: 8px; /* Rounded corners */
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center align the text */
+    margin-bottom: 20px; /* Space below the message */
+    transition: opacity 0.5s ease-in-out; /* Smooth fade-out effect */
+    opacity: 1; /* Initial opacity */
+  }
+  

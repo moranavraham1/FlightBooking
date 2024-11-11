@@ -1,0 +1,28 @@
+/* mybookingpage.css */
+.my-bookings-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .my-bookings-container h1 {
+    text-align: center;
+    color: #0056b3;
+    margin-bottom: 20px;
+  }
+  
+  .booked-flights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .booked-flight-item {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  

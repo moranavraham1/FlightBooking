@@ -22,10 +22,17 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px; /* Optional: Adds padding inside the header */
 }
 
 .App-link {
   color: #61dafb;
+  font-size: 1.5em;
+  margin: 10px 0; /* Space between the links */
+}
+
+.App-link:hover {
+  text-decoration: underline; /* Optional: Adds underline effect on hover */
 }
 
 @keyframes App-logo-spin {
@@ -36,3 +43,4 @@
     transform: rotate(360deg);
   }
 }
+

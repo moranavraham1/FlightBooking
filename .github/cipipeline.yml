@@ -1,0 +1,76 @@
+name: CI Pipeline for Flight Booking App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js version 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Check and kill process on port 27017 if running
+        run: |
+          if lsof -i :27017; then
+            echo "Port 27017 is already in use. Stopping the process..."
+            pid=$(lsof -t -i :27017)
+            kill -9 $pid
+          else
+            echo "Port 27017 is not in use."
+          fi
+
+      - name: Verify docker-compose.yml file exists in backend directory
+        run: |
+          if [ ! -f "./flight-booking-backend/docker-compose.yml" ]; then
+            echo "docker-compose.yml file not found in backend directory!"
+            exit 1
+          else
+            echo "docker-compose.yml file exists in backend directory."
+          fi
+
+      - name: Build and run the backend and MongoDB containers
+        run: |
+          cd flight-booking-backend
+          npm install
+          docker-compose -f docker-compose.yml up -d backend mongodb
+
+      - name: Wait for MongoDB to be ready
+        run: |
+          echo "Waiting for MongoDB to start..."
+          sleep 10
+
+      - name: Build and run the frontend
+        run: |
+          cd flight-booking-frontend
+          npm install
+          npm start &
+
+      - name: Wait for the frontend to be ready
+        run: |
+          echo "Waiting for frontend to start..."
+          sleep 10
+
+      - name: Install Cypress and run tests in the frontend directory
+        run: |
+          cd flight-booking-frontend
+          npm install cypress --save-dev
+          npx cypress run
+
+      - name: Tear down Docker containers
+        run: |
+          cd flight-booking-backend
+          docker-compose down --volumes --remove-orphans

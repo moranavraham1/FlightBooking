@@ -1,12 +1,27 @@
-const mongoose = require('mongoose');
+// models/Booking.js
+const { DataTypes } = require('sequelize');
+const sequelize = require('../confing/database'); // Sequelize instance
 
-const bookingSchema = new mongoose.Schema({
-  bookingName: String, 
-  startPoint: String, 
-  endPoint: String, 
-  totalPrice: Number, 
+const Booking = sequelize.define('Booking', {
+  bookingName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  startPoint: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  endPoint: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  totalPrice: {
+    type: DataTypes.FLOAT,  // Changed to FLOAT in case you need decimal support
+    allowNull: false,
+  },
+}, {
+  tableName: 'Bookings', // Ensure the table name is 'Bookings'
+  timestamps: false, // Set to false if you don't want 'createdAt' and 'updatedAt'
 });
-
-const Booking = mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking;

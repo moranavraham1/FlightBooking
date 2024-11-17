@@ -1,13 +1,31 @@
-// models/Flight.js
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../confing/database');
 
-const flightSchema = new mongoose.Schema({
-  name: String,
-  departure: String,
-  destination: String,
-  price: Number,
+const Flight = sequelize.define('Flight', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  departure: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  destination: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  }
+}, {
+  tableName: 'Flights',
+  timestamps: false,
+  schema: 'public' // Explicitly set the schema
 });
-
-const Flight = mongoose.model('Flight', flightSchema);
-
-module.exports = Flight;

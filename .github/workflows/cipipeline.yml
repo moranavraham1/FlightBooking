@@ -1,76 +1,91 @@
-name: CI Pipeline for Flight Booking App
+name: Flight Booking CI Pipeline
 
+# Trigger the workflow on push or pull requests
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the code from the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js version 20
+      # Step 2: Uninstall existing Node.js and clear cache
+      - name: Remove existing Node.js installation and clear cache
+        run: |
+          sudo rm -rf /opt/hostedtoolcache/node
+          sudo rm -rf ~/.npm
+          sudo rm -rf ~/.cache
+
+      # Step 3: Reinstall Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
+      # Step 4: Verify Node.js Installation
+      - name: Verify Node.js installation
+        run: |
+          node -v
+          npm -v
+
+      # Step 5: Install backend dependencies
+      - name: Install backend dependencies
+        working-directory: ./flight-booking-backend
+        run: npm install
+
+      # Step 6: Install Docker Compose
       - name: Install Docker Compose
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
 
-      - name: Check and kill process on port 27017 if running
+      # Step 7: Cleanup previous containers (stop and remove existing containers)
+      - name: Cleanup previous containers
         run: |
-          if lsof -i :27017; then
-            echo "Port 27017 is already in use. Stopping the process..."
-            pid=$(lsof -t -i :27017)
-            kill -9 $pid
-          else
-            echo "Port 27017 is not in use."
-          fi
+          docker-compose down || true
+          docker ps -a -q | xargs docker stop || true
+          docker ps -a -q | xargs docker rm || true
 
-      - name: Verify docker-compose.yml file exists in backend directory
-        run: |
-          if [ ! -f "./flight-booking-backend/docker-compose.yml" ]; then
-            echo "docker-compose.yml file not found in backend directory!"
-            exit 1
-          else
-            echo "docker-compose.yml file exists in backend directory."
-          fi
+      # Step 8: Set up Docker Buildx (to use Docker compose)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Build and run the backend and MongoDB containers
+      # Step 9: Build and run Docker Compose for backend and PostgreSQL
+      - name: Build and Run Backend with Docker Compose
+        working-directory: ./flight-booking-backend
         run: |
-          cd flight-booking-backend
-          npm install
-          docker-compose -f docker-compose.yml up -d backend mongodb
+          docker-compose down || true
+          docker-compose up -d --build
+        
 
-      - name: Wait for MongoDB to be ready
-        run: |
-          echo "Waiting for MongoDB to start..."
-          sleep 10
+      # Step 10: Install frontend dependencies
+      - name: Install frontend dependencies
+        working-directory: ./flight-booking-frontend
+        run: npm install
 
-      - name: Build and run the frontend
-        run: |
-          cd flight-booking-frontend
-          npm install
-          npm start &
+      # Step 11: Start frontend server in the background
+      - name: Start frontend server
+        working-directory: ./flight-booking-frontend
+        run: npm start &
 
-      - name: Wait for the frontend to be ready
-        run: |
-          echo "Waiting for frontend to start..."
-          sleep 10
+      
 
-      - name: Install Cypress and run tests in the frontend directory
-        run: |
-          cd flight-booking-frontend
-          npm install cypress --save-dev
-          npx cypress run
+      # Step 13: Run Cypress tests (frontend testing)
+      - name: Run Cypress Tests
+        working-directory: ./flight-booking-frontend
+        run: npx cypress run
 
-      - name: Tear down Docker containers
-        run: |
-          cd flight-booking-backend
-          docker-compose down --volumes --remove-orphans
+      # Step 14: Tear down Docker services
+      - name: Tear Down Docker Compose
+        working-directory: ./flight-booking-backend
+        run: docker-compose down

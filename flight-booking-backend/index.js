@@ -61,7 +61,9 @@ sequelize.authenticate()
       // Handle errors during table creation or data seeding
       console.error('Error creating tables and seeding data:', error);
     }
-
+    app.get('/', (req, res) => {
+      res.status(200).send('Server is running!');
+    });
     // Start the server
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);

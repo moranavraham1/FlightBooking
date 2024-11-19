@@ -77,6 +77,11 @@ jobs:
       - name: Start frontend server
         working-directory: ./flight-booking-frontend
         run: npm start &
+      
+      - name: Run Backend Tests
+        working-directory: ./flight-booking-backend
+        run: |
+          docker-compose exec -T backend npm run test-docker
 
       
 
@@ -89,3 +94,4 @@ jobs:
       - name: Tear Down Docker Compose
         working-directory: ./flight-booking-backend
         run: docker-compose down
+

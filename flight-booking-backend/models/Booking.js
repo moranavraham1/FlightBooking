@@ -1,6 +1,6 @@
 // models/Booking.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../confing/database'); // Sequelize instance
+const sequelize = require('../config/database'); // Sequelize instance
 
 const Booking = sequelize.define('Booking', {
   bookingName: {

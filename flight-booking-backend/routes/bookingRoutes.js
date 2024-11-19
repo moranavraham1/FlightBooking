@@ -1,29 +1,7 @@
 const express = require('express');
-const sequelize = require('../confing/database');
+const sequelize = require('../config/database');
 const { QueryTypes } = require('sequelize');
 const router = express.Router();
-
-// Create Bookings table if it doesn't exist
-async function createBookingsTable() {
-  try {
-    await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS "Bookings" (
-        id SERIAL PRIMARY KEY,
-        "bookingName" VARCHAR(255) UNIQUE NOT NULL,
-        "startPoint" VARCHAR(255) NOT NULL,
-        "endPoint" VARCHAR(255) NOT NULL,
-        "totalPrice" FLOAT NOT NULL,
-        "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-    console.log('Bookings table created or already exists');
-  } catch (error) {
-    console.error('Error creating Bookings table:', error);
-  }
-}
-
-// Initialize the table
-createBookingsTable();
 
 // POST route for creating a booking using raw SQL
 router.post('/', async (req, res) => {
@@ -69,8 +47,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const bookings = await sequelize.query(`
-      SELECT * FROM "Bookings" 
-      
+      SELECT * FROM "Bookings"
     `, {
       type: QueryTypes.SELECT
     });

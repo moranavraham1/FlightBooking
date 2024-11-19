@@ -1,12 +1,9 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../confing/database');
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../config/database');
 
-const Flight = sequelize.define('Flight', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
+class Flight extends Model {}
+
+Flight.init({
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -25,7 +22,11 @@ const Flight = sequelize.define('Flight', {
     allowNull: false
   }
 }, {
+  sequelize,
+  modelName: 'Flight',
   tableName: 'Flights',
   timestamps: false,
-  schema: 'public' // Explicitly set the schema
+  schema: 'public'
 });
+
+module.exports = Flight;

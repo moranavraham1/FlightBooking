@@ -9,7 +9,7 @@ services:
       DATABASE_URL: postgres://myuser:mysecurepassword@postgres:5432/flightbooking
     depends_on:
       postgres:
-        condition: service_healthy  # Ensure postgres is healthy before starting backend
+        condition: service_healthy # Ensure postgres is healthy before starting backend
 
   postgres:
     image: postgres:15-alpine
@@ -18,9 +18,9 @@ services:
       POSTGRES_PASSWORD: mysecurepassword
       POSTGRES_DB: flightbooking
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "myuser", "-d", "flightbooking"]
+      test: [ "CMD", "pg_isready", "-U", "myuser", "-d", "flightbooking" ]
       interval: 10s
       retries: 5
       start_period: 30s
